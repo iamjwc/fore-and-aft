@@ -60,15 +60,20 @@ slotToString Blank = "_ "
 slotToString _     = "  "
 
 
--- Stolen from haskell chess solver
--- updateList :: Row -> Int -> (Slot -> Slot) -> Row
-updateList []     _     _ = []
-updateList (x:xs) 0     f = (f x):xs
-updateList (x:xs) index f = x:updateList xs (index-1) f
+-- -- Stolen from haskell chess solver
+-- -- updateList :: Row -> Int -> (Slot -> Slot) -> Row
+-- updateList []     _     _ = []
+-- updateList (x:xs) 0     f = (f x):xs
+-- updateList (x:xs) index f = x:updateList xs (index-1) f
+-- 
+-- insertInMatrix :: (Coords Int Int) -> Slot -> Board -> Board
+-- insertInMatrix (Coords x y) newValue board = updateList board y (\z->updateList z x (const newValue)) 
+-- -- end stolen code
 
-updateMatrix :: (Coords Int Int) -> Slot -> Board -> Board
-updateMatrix (Coords x y) newValue board = updateList board y (\z->updateList z x (const newValue)) 
--- end stolen code
+insertAt x i xs = ys ++ [x] ++ zs
+                  where (ys,z:zs) = splitAt i xs
+
+insertInMatrix (Coords x y) newValue board = insertAt (insertAt newValue x (board !! y)) y board
 
 possibleMoves = [(direction, distance) | direction <- [Main.Up, Main.Down, Main.Right, Main.Left], distance <- [1,2]]
 
@@ -97,7 +102,7 @@ makeMoves board = map (\from -> move from to board) moves
                   where moves = possibleValidMoves board
                         to    = findOpenSlot board
 
-move from to board = updateMatrix to fromPiece (updateMatrix from toPiece board)
+move from to board = insertInMatrix to fromPiece (insertInMatrix from toPiece board)
                      where fromPiece = slotAt from board
                            toPiece   = slotAt to board
 
