@@ -19,20 +19,18 @@ data Coords x y = Coords x y
                   deriving (Show)
 
 
-startingBoard = [ [ Red,     Red,     Red,   Invalid, Invalid],
-                  [ Red,     Red,     Red,   Invalid, Invalid],
-                  [ Red,     Red,     Blank, Blue,    Blue],
-                  [ Invalid, Invalid, Blue,  Blue,    Blue],
-                  [ Invalid, Invalid, Blue,  Blue,    Blue]]
+startingBoard = [ [ Red,     Red,   Invalid, Invalid],
+                  [ Red,     Red,   Invalid, Invalid],
+                  [ Red,     Blank, Blue,    Blue],
+                  [ Invalid, Blue,  Blue,    Blue]]
 
-solvedBoard = [ [ Blue,    Blue,    Blue,  Invalid, Invalid],
-                [ Blue,    Blue,    Blue,  Invalid, Invalid],
-                [ Blue,    Blue,    Blank, Red,     Red],
-                [ Invalid, Invalid, Red,   Red,     Red],
-                [ Invalid, Invalid, Red,   Red,     Red]]
+solvedBoard = [ [ Blue,    Blue,  Invalid, Invalid],
+                [ Blue,    Blue,  Invalid, Invalid],
+                [ Blue,    Blank, Red,     Red],
+                [ Invalid, Red,   Red,     Red]]
 
-height = 5
-width  = 5
+height = 4
+width  = 4
 
 isSolved = and . zipWith (==) solvedBoard
 
