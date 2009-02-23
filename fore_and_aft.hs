@@ -21,12 +21,20 @@ data Coords x y = Coords x y
 
 startingBoard = [ [ Red,     Red,     Red,   Invalid, Invalid],
                   [ Red,     Red,     Red,   Invalid, Invalid],
-                  [ Red,     Blank,   Red,   Blue,    Blue],
+                  [ Red,     Red,     Blank, Blue,    Blue],
                   [ Invalid, Invalid, Blue,  Blue,    Blue],
                   [ Invalid, Invalid, Blue,  Blue,    Blue]]
 
+solvedBoard = [ [ Blue,    Blue,    Blue,  Invalid, Invalid],
+                [ Blue,    Blue,    Blue,  Invalid, Invalid],
+                [ Blue,    Blue,    Blank, Red,     Red],
+                [ Invalid, Invalid, Red,   Red,     Red],
+                [ Invalid, Invalid, Red,   Red,     Red]]
+
 height = 5
 width  = 5
+
+isSolved = and . zipWith (==) solvedBoard
 
 coordAt (Coords x y) dir spaces
   | dir == Main.Up    = (Coords x (y - spaces))
@@ -95,6 +103,10 @@ move from to board = updateMatrix to fromPiece (updateMatrix from toPiece board
                      where fromPiece = slotAt from board
                            toPiece   = slotAt to board
 
+solve (x:xs)
+  | isSolved x = x
+  | otherwise  = solve $ xs ++ makeMoves x
+              
 
 isOnBoard (Coords x y) = (x >= 0 && x < width) && (y >= 0 && y < height)
 
